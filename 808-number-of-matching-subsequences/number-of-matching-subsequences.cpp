@@ -19,28 +19,28 @@
 //         }
 //         return count;
 //     }
-// };
 class Solution {
 public:
-    vector<vector<int>> pos;
+    unordered_map<char, vector<int>> mp;
 
     bool isSubsequence(string &s, string &t) {
         int prev = -1;
+
         for (char c : s) {
-            auto &v = pos[c - 'a'];
+            if (mp.find(c) == mp.end()) return false;
+
+            auto &v = mp[c];
             auto it = upper_bound(v.begin(), v.end(), prev);
             if (it == v.end()) return false;
+
             prev = *it;
         }
         return true;
     }
 
     int numMatchingSubseq(string s, vector<string>& words) {
-        pos.assign(26, {});
-        
-        // Preprocess s
         for (int i = 0; i < s.size(); i++) {
-            pos[s[i] - 'a'].push_back(i);
+            mp[s[i]].push_back(i);
         }
 
         int count = 0;
